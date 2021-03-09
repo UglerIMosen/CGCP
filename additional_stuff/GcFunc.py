@@ -71,7 +71,7 @@ class data_loading_tools(object):
         file=open(path,'r')
         lines=file.readlines()
         mask = ['#line pressure: ' in i for i in lines]
-        if mask == []:
+        if len(np.array(lines)[mask]) == 0:
             return info.GC_conversion_to_Perc['calibration pressure']
         else:
             filtered_lines = np.array(lines)[mask]
@@ -258,9 +258,12 @@ class integration_tools(object):
             file = open(filename,'w+')
         else: 
             file = open(filename+'.txt','w+')
-        str_cache = '#'+dimension+self.info.delimiter
+        if dimension == '':
+            str_cache = '#'
+        else:
+            str_cache = '#'+dimension+self.info.delimiter
         for key in list(data.keys()):
-            str_cache = str_cache+str(data[key])+info.delimiter
+            str_cache = str_cache+str(key)+info.delimiter
         file.write(str_cache+'\n')
         
         if data_x[0] == None:
