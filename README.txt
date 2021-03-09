@@ -8,7 +8,7 @@
  `._____.'   `._____.'    |_____| |____|  |____||____| |___||_______.'|_________| |____| |___|
 ----------------------------------------------------------------------------------------------
 
-For use at DTU Physics                                                    GC Parser 2.0.0 (2021)
+For use at DTU Physics                                                    	    git (2021)
 
 CGCP - Continuous Gas Chromatograph Parser
 
@@ -93,7 +93,7 @@ code for this purpose if needed.
 	characterization of novel catalysts: Heusler alloy nanoparticles" by Thomas Smitshuysen. This should
 	be available from DTU Findit.
 - 	Relative calibration factors vs methane for the FID-detector can be found in the attached article.
-	- not all alkanes/alkenes/alkynes are present. Either find another article or use the rule of thumbs: the 		relative response to methane goes as 1 over every CHx-group. Thus CH4 has factor 1, C2H4 and C2H6 has 		1/2, C8H18 has 1/8.
+	- not all alkanes/alkenes/alkynes are present. Either find another article or use the rule of thumbs: the relative response to methane goes as 1 over every CHx-group. Thus CH4 has factor 1, C2H4 and C2H6 has 1/2, C8H18 has 1/8.
 -	There is also the possibility of changing factors and off-sets for data achieved from mass-flow 
 	controllers (MFC's). This should be used, when gasses used in the experiment doesn't have the right
 	flow-factors. Brooks and/or Bronkhorst have tables available for conversion-factors.
@@ -121,7 +121,7 @@ code for this purpose if needed.
 - active figures doesn't work properly when using Spyder. An expert in spyder could tell you, how to set the settings properly in spyder in order to allow the figures that are generated in this script
 
 (+) Help and questions
-Write to thoe@fysik.dtu.dk or find me in 307:044 at DTU. 
+Write the author or find me in person
 
 (+) Thanks
 To Kenneth Nielsen, one of the great contributors on earth. Especially towards proper python-programming.
@@ -229,3 +229,5 @@ Version history of CGCP.py
 
 2.0.0
 - Copy of 1.6.0, but made a github repository instead.
+
+No more version history will be given in this document. For older versions, ask the author.
