@@ -16,7 +16,11 @@ from matplotlib import pyplot as plt
 from scipy.special import erf
 from scipy.optimize import curve_fit
 
-from additional_stuff.manual_settings import MANUAL_SETTINGS
+try:
+    from manual_settings import MANUAL_SETTINGS
+except:
+    print('using standard settings')
+    from additional_stuff.manual_settings import MANUAL_SETTINGS
 
 import tkinter as tk
 import tkinter.ttk as ttk

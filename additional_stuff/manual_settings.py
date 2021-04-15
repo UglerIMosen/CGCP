@@ -126,18 +126,18 @@ class MANUAL_SETTINGS(object):
                                         'mother_peak' : []} 
 
         self.fit_info['FID']['DME'] =  {'start'       : 8.7,
-                                        'end'         : 9.2, 
+                                        'end'         : 9.15, 
                                         'name'        : 'DME/8.8 min',
                                         'color'       : 'lightgreen',
                                         'mother_peak' : []} 
 
         self.fit_info['FID']['MeOH'] = {'start'       : 9.15,
-                                        'end'         : 9.5, 
+                                        'end'         : 9.68, 
                                         'name'        : 'MeOH/9.3 min',
                                         'color'       : 'lightgreen',
                                         'mother_peak' : []} 
 
-        self.fit_info['FID']['C4Hx'] = {'start'       : 9.6,
+        self.fit_info['FID']['C4Hx'] = {'start'       : 9.68,
                                         'end'         : 10.2, 
                                         'name'        : 'C$_4$H$_x$/9.3 min',
                                         'color'       : 'purple',
