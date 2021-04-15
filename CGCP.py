@@ -9,6 +9,7 @@ else:
     GcLogo()
 
 import sys
+import os
 from pprint import pprint  # pprint == pretty print
 
 # Python version check
@@ -19,19 +20,28 @@ if sys.version_info.major < 3: #courtesy of Keni
 """
 #MANUAL SETTINGS
 """ 
-from additional_stuff.GcFunc import GC_plots
-gc_plots = GC_plots()
+from additional_stuff.GcFunc import get_path
+path_tool = get_path()
+path = path_tool.ask_path()
+
+if 'manual_settings.py' in os.listdir(path):
+    sys.path.append(path)
+    from manual_settings import MANUAL_SETTINGS
+    print(' ')
+    print('Using fitting information from data path') 
+else:
+    from additional_stuff.manual_settings import MANUAL_SETTINGS
+    print(' ')
+    print('Using default fitting information')
+info = MANUAL_SETTINGS()
 
 
 from additional_stuff.GcFunc import data_loading_tools
+load_tools = data_loading_tools(info)
 
-load_tools = data_loading_tools()
-path = load_tools.ask_path()
 
-#from tkinter import Tk
-#from tkinter.filedialog import askdirectory
-#Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-#path = askdirectory() # show an "Open" dialog box and return the path to the selected file
+from additional_stuff.GcFunc import GC_plots
+gc_plots = GC_plots(info)
 
 print(' ')
 print('All settings are configured:')
@@ -85,7 +95,7 @@ gc_plots.MFC_plot(rel_time, reactor_temperature, reactor_pressure, massflow_O2, 
 #Data treatment
 """
 from additional_stuff.GcFunc import integration_tools
-int_tools = integration_tools()
+int_tools = integration_tools(info)
 
 print('----------------------------------------------------')
 print(' ')
@@ -253,7 +263,7 @@ for gas in gc_plots.info.fit_info['FID']:
 for gas in gc_plots.info.fit_info['TCD']:
     try:
         if injection_pressure[0] == None:
-            concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/injection_pressure
+            concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/pressure_GCmeaned
         else:
             concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/injection_pressure
     except:

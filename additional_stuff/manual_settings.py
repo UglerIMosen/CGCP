@@ -54,15 +54,15 @@ class MANUAL_SETTINGS(object):
                                              'CO'  : 4.373}#4.28}#+-0.001}
                                              #'Methane': 6.2826}
         
-        self.GC_conversion_to_Perc['FID'] = {'CH4' : 0.5158, #+-0.0031, or 1% error if used for other factors. Reponse is always 1
-                                             'C2H4': 0.5158/1.97, #+-17%, response: 1.97 [2]
-                                             'C2H6': 0.5158/1.99, #+-17%, response: 1.99 [2]
-                                             'C3H6': 0.5158/3.00, #+-17%, response: 3 [2]
-                                             'C3H8': 0.5158/3.00, #+-17%, response: 3 [2]
-                                             'C4Hx': 0.5158/4.00,
-                                             'DME' : 0.5158/1.10938, #+-1%; response: 1.10938 [1]
-                                             'MeOH': 0.5158/0.628319, #+-1%; response: 0.628319 [1]
-                                             'EtOH': 0.5158/1.59} #+-17%, response: 1.59 [2]
+        self.GC_conversion_to_Perc['FID'] = {'CH4' : 0.3597, #+-0.0031, or 1% error if used for other factors. Reponse is always 1
+                                             'C2H4': 0.3597/1.97, #+-17%, response: 1.97 [2]
+                                             'C2H6': 0.3597/1.99, #+-17%, response: 1.99 [2]
+                                             'C3H6': 0.3597/3.00, #+-17%, response: 3 [2]
+                                             'C3H8': 0.3597/3.00, #+-17%, response: 3 [2]
+                                             'C4Hx': 0.3597/4.00,
+                                             'DME' : 0.3597/1.10938, #+-1%; response: 1.10938 [1]
+                                             'MeOH': 0.3597/0.628319, #+-1%; response: 0.628319 [1]
+                                             'EtOH': 0.3597/1.59} #+-17%, response: 1.59 [2]
 
         
         #INFO FOR BACKGROUND FITTING AND INTEGRATION
@@ -126,18 +126,18 @@ class MANUAL_SETTINGS(object):
                                         'mother_peak' : []} 
 
         self.fit_info['FID']['DME'] =  {'start'       : 8.7,
-                                        'end'         : 9.2, 
+                                        'end'         : 9.15, 
                                         'name'        : 'DME/8.8 min',
                                         'color'       : 'lightgreen',
                                         'mother_peak' : []} 
 
         self.fit_info['FID']['MeOH'] = {'start'       : 9.15,
-                                        'end'         : 9.5, 
+                                        'end'         : 9.68, 
                                         'name'        : 'MeOH/9.3 min',
                                         'color'       : 'lightgreen',
                                         'mother_peak' : []} 
 
-        self.fit_info['FID']['C4Hx'] = {'start'       : 9.6,
+        self.fit_info['FID']['C4Hx'] = {'start'       : 9.68,
                                         'end'         : 10.2, 
                                         'name'        : 'C$_4$H$_x$/9.3 min',
                                         'color'       : 'purple',
