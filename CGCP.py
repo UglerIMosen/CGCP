@@ -253,7 +253,7 @@ for gas in gc_plots.info.fit_info['FID']:
 for gas in gc_plots.info.fit_info['TCD']:
     try:
         if injection_pressure[0] == None:
-            concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/injection_pressure
+            concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/pressure_GCmeaned
         else:
             concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/injection_pressure
     except:
