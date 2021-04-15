@@ -16,12 +16,6 @@ from matplotlib import pyplot as plt
 from scipy.special import erf
 from scipy.optimize import curve_fit
 
-try:
-    from manual_settings import MANUAL_SETTINGS
-except:
-    print('using standard settings')
-    from additional_stuff.manual_settings import MANUAL_SETTINGS
-
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.filedialog import askdirectory
@@ -30,9 +24,7 @@ from tkinter.filedialog import askdirectory
 GC Tools
 """
 
-info = MANUAL_SETTINGS()
-
-class data_loading_tools(object):
+class get_path(object):
 
     def ask_path(self):
         root = tk.Tk()
@@ -43,6 +35,11 @@ class data_loading_tools(object):
         if sys.platform != 'darwin':
             root.destroy()
         return path
+
+class data_loading_tools(object):
+
+    def __init__(self,info):
+        self.info = info
 
     def make_numbered_folder(self,folder_name):
         #will try to make a folder of said name, but extend with a number, if the folder already exists
@@ -75,8 +72,8 @@ class data_loading_tools(object):
         file=open(path,'r')
         lines=file.readlines()
         mask = ['#line pressure: ' in i for i in lines]
-        if mask == []:
-            return info.GC_conversion_to_Perc['calibration pressure']
+        if list(np.array(lines)[mask]) == []:
+            return self.info.GC_conversion_to_Perc['calibration pressure']
         else:
             filtered_lines = np.array(lines)[mask]
             val = re.findall(r"[+-]? *(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?",filtered_lines[0])[0]
@@ -135,7 +132,7 @@ class data_loading_tools(object):
         
         
         
-        data_collection = data_collection[info.skip_start:len(data_collection)-info.skip_end]
+        data_collection = data_collection[self.info.skip_start:len(data_collection)-self.info.skip_end]
         return data_collection
 
     def load_setup_data(self,path):
@@ -148,17 +145,17 @@ class data_loading_tools(object):
             reactor_pressure = (setup_data[7]+setup_data[8])*0.5 #units in bar
         except:
             reactor_pressure = setup_data[7]
-        massflow_O2  = info.O2_MFC_factor*setup_data[2]+info.O2_MFC_offset #O2
-        massflow_H2  = info.H2_MFC_factor*setup_data[3]+info.H2_MFC_offset #H2
-        massflow_CO2 = info.CO2_MFC_factor*setup_data[4]+info.CO2_MFC_offset #CO2
-        massflow_CO  = info.CO_MFC_factor*setup_data[5]+info.CO_MFC_offset #CO
-        massflow_Ar  = info.Ar_MFC_factor*setup_data[6]+info.Ar_MFC_offset #Ar
+        massflow_O2  = self.info.O2_MFC_factor*setup_data[2]+self.info.O2_MFC_offset #O2
+        massflow_H2  = self.info.H2_MFC_factor*setup_data[3]+self.info.H2_MFC_offset #H2
+        massflow_CO2 = self.info.CO2_MFC_factor*setup_data[4]+self.info.CO2_MFC_offset #CO2
+        massflow_CO  = self.info.CO_MFC_factor*setup_data[5]+self.info.CO_MFC_offset #CO
+        massflow_Ar  = self.info.Ar_MFC_factor*setup_data[6]+self.info.Ar_MFC_offset #Ar
         massflow_total = massflow_H2+massflow_CO2+massflow_CO+massflow_Ar+massflow_O2
         return rel_time, reactor_temperature, reactor_pressure, massflow_O2, massflow_H2, massflow_CO2, massflow_CO, massflow_Ar, massflow_total
 
 class integration_tools(object):
 
-    def __init__(self):
+    def __init__(self, info):
         self.info = info
         self.background_func = {'error': self.errorfunc,
                                 'linear': self.linearfunc        
@@ -251,8 +248,8 @@ class integration_tools(object):
             error_array[peak] = abs(area_error)
         
         for peak in self.info.fit_info[detector]:
-            if 'mother_peak' in info.fit_info[detector][peak]:
-                for motherpeak in info.fit_info[detector][peak]['mother_peak']:
+            if 'mother_peak' in self.info.fit_info[detector][peak]:
+                for motherpeak in self.info.fit_info[detector][peak]['mother_peak']:
                     results_array[motherpeak] = results_array[motherpeak]-results_array[peak]
         else:
             return results_array, error_array
@@ -264,21 +261,21 @@ class integration_tools(object):
             file = open(filename+'.txt','w+')
         str_cache = '#'+dimension+self.info.delimiter
         for key in list(data.keys()):
-            str_cache = str_cache+str(data[key])+info.delimiter
+            str_cache = str_cache+str(data[key])+self.info.delimiter
         file.write(str_cache+'\n')
         
         if data_x[0] == None:
             str_cache = ''
             for n in range(0,len(data[key])):
                 for key in list(data.keys()):
-                    str_cache = str_cache+str(data[key][n])+info.delimiter
+                    str_cache = str_cache+str(data[key][n])+self.info.delimiter
                 file.write(str_cache+'\n')
                 str_cache = ''
         else:
             for t,n in zip(data_x,range(0,len(data[key]))):
-                str_cache = str(t)+info.delimiter
+                str_cache = str(t)+self.info.delimiter
                 for key in list(data.keys()):
-                    str_cache = str_cache+str(data[key][n])+info.delimiter
+                    str_cache = str_cache+str(data[key][n])+self.info.delimiter
                 file.write(str_cache+'\n')
         file.close()
 
@@ -288,7 +285,7 @@ all the plots
 
 class GC_plots(object):
     
-    def __init__(self):
+    def __init__(self, info):
         self.info = info
     
         self.fig_info = {} #Make a dict for graph-colors and such
