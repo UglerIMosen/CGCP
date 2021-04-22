@@ -3,7 +3,7 @@ import time
 import re
 import numpy as np
 import sys
-version = '1.6.0' #5-marts-2021
+version = '2.0.0' #githun version
 
 #plot-design
 import matplotlib as mpl
@@ -314,7 +314,7 @@ class GC_plots(object):
 
         #setup of raw data
         #spectrum_length = len(sequence[0]['retention time'])-500 #hardcoded to exclude the last 10 points, since the spectra-length vary this value will be the reference for the length, and generally the sampling is high, so a GC-spectrum could be 10000-100000 points long
-        spectrum_length = min([len(i['FID']) for i in sequence])
+        spectrum_length = min([len(i['FID']) for i in sequence])-1
         TCD_raw = []
         FID_raw = []
         for injection in sequence: 
