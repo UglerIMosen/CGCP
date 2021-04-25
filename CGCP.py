@@ -33,12 +33,11 @@ else:
     from additional_stuff.manual_settings import MANUAL_SETTINGS
     print(' ')
     print('Using default fitting information')
+    
 info = MANUAL_SETTINGS()
-
 
 from additional_stuff.GcFunc import data_loading_tools
 load_tools = data_loading_tools(info)
-
 
 from additional_stuff.GcFunc import GC_plots
 gc_plots = GC_plots(info)
@@ -74,6 +73,10 @@ print(' ')
 folder = load_tools.make_numbered_folder(path+'/'+str(datetime.date.today()))
 print('Data is saved to "'+folder+'".')
 print(' ')
+
+from additional_stuff.settings_generator import settings_generator
+func = settings_generator(folder,info)
+func.write_file()
 
 """
 #Load and plot raw GC data
