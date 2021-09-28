@@ -266,7 +266,7 @@ class integration_tools(object):
         else:
             str_cache = '#'+dimension+self.info.delimiter
         for key in list(data.keys()):
-            str_cache = str_cache+str(data[key])+self.info.delimiter
+            str_cache = str_cache+str(key)+self.info.delimiter
 
         file.write(str_cache+'\n')
         
