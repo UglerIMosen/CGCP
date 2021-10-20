@@ -244,6 +244,7 @@ concentrations = {}
 concentrations['time'] = rel_time_GCmeaned
 concentrations['temperature'] = temperature_GCmeaned
 concentrations['pressure'] = pressure_GCmeaned
+concentrations['injection_pressure'] = injection_pressure
 concentrations['total_massflow'] = massflow_total_GCmeaned
 concentrations['MFC1'] = massflow_O2_GCmeaned
 concentrations['MFC2'] = massflow_H2_GCmeaned
