@@ -159,7 +159,7 @@ class MANUAL_SETTINGS(object):
         #                                'background'        : 'error', #not mandatory
         #                                'background_range'  : 0.01} #not mandatory
         
-        self.fit_info['TCD']['CO2'] =  {'start'       : 4.0,
+        self.fit_info['TCD']['CO2'] =  {'start'       : 3.8,
                                         'end'         : 5.6,
                                         'name'        : 'CO$_2$/3.8 min',
                                         'color'       : 'tab:blue',
@@ -189,7 +189,7 @@ class MANUAL_SETTINGS(object):
                                         'color'       : 'm',
                                         'mother_peak' : []}
 
-        self.fit_info['TCD']['CO'] =   {'start'             : 9.25,
+        self.fit_info['TCD']['CO'] =   {'start'             : 9.20,
                                         'end'               : 9.45,
                                         'name'              : 'CO/9.2 min',
                                         'color'             : 'saddlebrown',
