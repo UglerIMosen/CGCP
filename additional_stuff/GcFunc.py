@@ -101,18 +101,18 @@ class data_loading_tools(object):
 
     def Sequence(self,path):
         dir_list = os.listdir(path)
-        liszt = sorted([j for j in dir_list if j[0:13] == 'GC_injection_' 
+        liszt = sorted([j for j in dir_list if j[0:13] == 'GC_injection_' and j[-5] != ')' 
                                                  and not j[13:15].isdecimal()]) #first 9 injections
         cache_list = sorted([j for j in dir_list if j[0:13] == 'GC_injection_' 
                                                  and j[13:15].isdecimal() 
                                                  and not j[13:16].isdecimal()]) #next 90 injections
         liszt.extend(cache_list)
-        cache_list = sorted([j for j in dir_list if j[0:13] == 'GC_injection_' 
+        cache_list = sorted([j for j in dir_list if j[0:13] == 'GC_injection_' and j[-5] != ')' 
                                                  and j[13:15].isdecimal() 
                                                  and j[13:16].isdecimal() 
                                                  and not j[13:17].isdecimal()]) #next 900 injections
         liszt.extend(cache_list)
-        cache_list = sorted([j for j in dir_list if j[0:13] == 'GC_injection_' 
+        cache_list = sorted([j for j in dir_list if j[0:13] == 'GC_injection_' and j[-5] != ')'
                                                  and j[13:15].isdecimal() 
                                                  and j[13:16].isdecimal() 
                                                  and j[13:17].isdecimal()
