@@ -255,6 +255,35 @@ concentrations['MFC5'] = massflow_Ar_GCmeaned
 if len(injectiontimes_sec) != len(concentrations['time']):
     print('Warning: Uneven amount of GC- and MFC-data')
 end_index = len(concentrations['time'])
+
+"""
+Fixing injection pressure
+"""
+if injection_pressure[0] != None:
+    broken = np.where(injection_pressure < 0)[0]
+    if len(broken) != 0:
+        print('------------------------------------------')
+        print('Issues with injection pressure encountered:')
+        if len(broken) == len(injection_pressure):
+            print('No injection pressure to use. Setting it to 1 bar')
+            injection_pressure = np.ones(len(injection_pressure))
+        else:
+            print('Some injection pressures are faulty. Basing injection pressure on what values are available.')
+            print('The following injections had a faulty injection pressure:')
+            print(broken)
+            for index in [*broken,*np.flip(broken)]:
+                if injection_pressure[index] < 0 and index != 0 and index != len(injection_pressure)-1:
+                    if injection_pressure[index-1] > 0 and injection_pressure[index+1] > 0:
+                        injection_pressure[index] = (injection_pressure[index-1]+injection_pressure[index+1])/2
+                    elif injection_pressure[index-1] > 0:
+                        injection_pressure[index] = injection_pressure[index-1]
+                    elif injection_pressure[index+1] > 0:
+                        injection_pressure[index] = injection_pressure[index+1]
+                elif injection_pressure[index] < 0 and index == 0:
+                    injection_pressure[index] = injection_pressure[index+1]
+                elif injection_pressure[index] < 0 and index == len(injection_pressure)-1:
+                    injection_pressure[index] = injection_pressure[index-1]
+            
     
 for gas in gc_plots.info.fit_info['FID']:
     try:
