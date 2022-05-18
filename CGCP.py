@@ -75,7 +75,8 @@ print('Data is saved to "'+folder+'".')
 print(' ')
 
 from additional_stuff.settings_generator import settings_generator
-func = settings_generator(folder,info)
+from additional_stuff.GcFunc import what_version
+func = settings_generator(folder,info,what_version())
 func.write_file()
 
 """
@@ -106,13 +107,23 @@ print('Start integrating of GC spectra. Progress:')
 
 injectiontimes_sec = []
 injection_pressure = []
+injection_back_pressure = []
 for injection in sequence:
     cache = injection['injection time']
     injectiontimes_sec.append(cache)
     cache = injection['line pressure']
     injection_pressure.append(cache)
+    cache = injection['line back pressure']
+    injection_back_pressure.append(cache)
 injectiontimes_sec = np.array(injectiontimes_sec)
 injection_pressure = np.array(injection_pressure)
+injection_back_pressure = np.array(injection_back_pressure)
+if 'unknown' in injection_back_pressure or 'unknown' in injection_pressure:
+    print()
+    print('Data is too old for the current version of CGCP. You need CGCP 2.0.0 or less.')
+    print('This program will exit')
+    print()
+    exit()
 
 FID_res = {}
 FID_err = {}
@@ -245,6 +256,7 @@ concentrations['time'] = rel_time_GCmeaned
 concentrations['temperature'] = temperature_GCmeaned
 concentrations['pressure'] = pressure_GCmeaned
 concentrations['injection_pressure'] = injection_pressure
+concentrations['injection_back_pressure'] = injection_back_pressure
 concentrations['total_massflow'] = massflow_total_GCmeaned
 concentrations['MFC1'] = massflow_O2_GCmeaned
 concentrations['MFC2'] = massflow_H2_GCmeaned
@@ -260,45 +272,18 @@ end_index = len(concentrations['time'])
 Fixing injection pressure
 """
 if injection_pressure[0] != None:
-    broken = np.where(injection_pressure < 0)[0]
-    if len(broken) != 0:
-        print('------------------------------------------')
-        print('Issues with injection pressure encountered:')
-        if len(broken) == len(injection_pressure):
-            print('No injection pressure to use. Setting it to 1 bar')
-            injection_pressure = np.ones(len(injection_pressure))
-        else:
-            print('Some injection pressures are faulty. Basing injection pressure on what values are available.')
-            print('The following injections had a faulty injection pressure:')
-            print(broken)
-            for index in [*broken,*np.flip(broken)]:
-                if injection_pressure[index] < 0 and index != 0 and index != len(injection_pressure)-1:
-                    if injection_pressure[index-1] > 0 and injection_pressure[index+1] > 0:
-                        injection_pressure[index] = (injection_pressure[index-1]+injection_pressure[index+1])/2
-                    elif injection_pressure[index-1] > 0:
-                        injection_pressure[index] = injection_pressure[index-1]
-                    elif injection_pressure[index+1] > 0:
-                        injection_pressure[index] = injection_pressure[index+1]
-                elif injection_pressure[index] < 0 and index == 0:
-                    injection_pressure[index] = injection_pressure[index+1]
-                elif injection_pressure[index] < 0 and index == len(injection_pressure)-1:
-                    injection_pressure[index] = injection_pressure[index-1]
-            
+    injection_pressure = load_tools.fix_line_pressure(injection_pressure)
+if injection_back_pressure[0] != None:
+    injection_back_pressure = load_tools.fix_line_pressure(injection_back_pressure)
     
 for gas in gc_plots.info.fit_info['FID']:
     try:
-        if injection_pressure[0] == None:
-            concentrations[gas] = GC_conversionP_to_Perc['FID'][gas]*np.array(FID_res[gas][:end_index])/pressure_GCmeaned
-        else:
-            concentrations[gas] = GC_conversionP_to_Perc['FID'][gas]*np.array(FID_res[gas][:end_index])/injection_pressure
+        concentrations[gas] = GC_conversionP_to_Perc['FID'][gas]*np.array(FID_res[gas][:end_index])/injection_back_pressure
     except:
         print('Following gas is not calibrated: '+gas)
 for gas in gc_plots.info.fit_info['TCD']:
     try:
-        if injection_pressure[0] == None:
-            concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/pressure_GCmeaned
-        else:
-            concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/injection_pressure
+        concentrations[gas] = GC_conversionP_to_Perc['TCD'][gas]*np.array(TCD_res[gas][:end_index])/injection_pressure
     except:
         print('Following gas is not calibrated: '+gas)
 

@@ -33,10 +33,6 @@ class MANUAL_SETTINGS(object):
         
         self.GC_conversion_to_Perc = {}
 
-        self.GC_conversion_to_Perc['calibration pressure'] = 1.0
-        #If a pressure regulator is used, then a value in bars according to the pressure at the GC, should be entered (1.2 bars is usually a good guess)
-        #If the pressure regulator is not used (it is not tightened), then leave the value as "None"
-
         #Info for CALIBRATION FACTORS. 
         #Following are calibrated on setup: H2, Ar, CO2, CO and CH4
         #calibration factors for other gasses can be found in [1] and [2]. 
@@ -54,15 +50,15 @@ class MANUAL_SETTINGS(object):
                                              'CO'  : 4.373}#4.28}#+-0.001}
                                              #'Methane': 6.2826}
         
-        self.GC_conversion_to_Perc['FID'] = {'CH4' : 0.3597, #+-0.0031, or 1% error if used for other factors. Reponse is always 1
-                                             'C2H4': 0.3597/1.97, #+-17%, response: 1.97 [2]
-                                             'C2H6': 0.3597/1.99, #+-17%, response: 1.99 [2]
-                                             'C3H6': 0.3597/3.00, #+-17%, response: 3 [2]
-                                             'C3H8': 0.3597/3.00, #+-17%, response: 3 [2]
-                                             'C4Hx': 0.3597/4.00,
-                                             'DME' : 0.3597/1.10938, #+-1%; response: 1.10938 [1]
-                                             'MeOH': 0.3597/0.628319, #+-1%; response: 0.628319 [1]
-                                             'EtOH': 0.3597/1.59} #+-17%, response: 1.59 [2]
+        self.GC_conversion_to_Perc['FID'] = {'CH4' : 0.2959, #+-0.0031, or 1% error if used for other factors. Reponse is always 1
+                                             'C2H4': 0.2959/1.97, #+-17%, response: 1.97 [2]
+                                             'C2H6': 0.2959/1.99, #+-17%, response: 1.99 [2]
+                                             'C3H6': 0.2959/3.00, #+-17%, response: 3 [2]
+                                             'C3H8': 0.2959/3.00, #+-17%, response: 3 [2]
+                                             'C4Hx': 0.2959/4.00,
+                                             'DME' : 0.2959/1.10938, #+-1%; response: 1.10938 [1]
+                                             'MeOH': 0.2959/0.628319, #+-1%; response: 0.628319 [1]
+                                             'EtOH': 0.2959/1.59} #+-17%, response: 1.59 [2]
 
         
         #INFO FOR BACKGROUND FITTING AND INTEGRATION
@@ -159,7 +155,7 @@ class MANUAL_SETTINGS(object):
         #                                'background'        : 'error', #not mandatory
         #                                'background_range'  : 0.01} #not mandatory
         
-        self.fit_info['TCD']['CO2'] =  {'start'       : 4.0,
+        self.fit_info['TCD']['CO2'] =  {'start'       : 3.8,
                                         'end'         : 5.6,
                                         'name'        : 'CO$_2$/3.8 min',
                                         'color'       : 'tab:blue',
@@ -189,7 +185,7 @@ class MANUAL_SETTINGS(object):
                                         'color'       : 'm',
                                         'mother_peak' : []}
 
-        self.fit_info['TCD']['CO'] =   {'start'             : 9.25,
+        self.fit_info['TCD']['CO'] =   {'start'             : 9.20,
                                         'end'               : 9.45,
                                         'name'              : 'CO/9.2 min',
                                         'color'             : 'saddlebrown',

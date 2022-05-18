@@ -3,7 +3,10 @@ import time
 import re
 import numpy as np
 import sys
-version = '2.0.0' #githun version
+version = '2.1.0' #github version
+
+def what_version():
+    return version
 
 #plot-design
 import matplotlib as mpl
@@ -74,13 +77,55 @@ class data_loading_tools(object):
         mask = ['#line pressure: ' in i for i in lines]
 
         if list(np.array(lines)[mask]) == []:
-            return self.info.GC_conversion_to_Perc['calibration pressure']
+            return 'unknown'
 
         else:
             filtered_lines = np.array(lines)[mask]
             val = re.findall(r"[+-]? *(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?",filtered_lines[0])[0]
             val = float(val)
             return val
+    
+    def read_line_back_pressure(self,path):
+        #read the injection time of the GC data file
+        file=open(path,'r')
+        lines=file.readlines()
+        mask = ['#post GC pressure: ' in i for i in lines]
+
+        if list(np.array(lines)[mask]) == []:
+            return 'unknown'
+
+        else:
+            filtered_lines = np.array(lines)[mask]
+            val = re.findall(r"[+-]? *(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?",filtered_lines[0])[0]
+            val = float(val)
+            return val
+
+    def fix_line_pressure(self,data):
+        injection_pressure = data
+        broken = np.where(injection_pressure < 0)[0]
+        if len(broken) != 0:
+            print('------------------------------------------')
+            print('Issues with injection pressure encountered:')
+            if len(broken) == len(injection_pressure):
+                print('No injection pressure to use. Setting it to 1 bar')
+                injection_pressure = np.ones(len(injection_pressure))
+            else:
+                print('Some injection pressures are faulty. Basing injection pressure on what values are available.')
+                print('The following injections had a faulty injection pressure:')
+                print(broken)
+                for index in [*broken,*np.flip(broken)]:
+                    if injection_pressure[index] < 0 and index != 0 and index != len(injection_pressure)-1:
+                        if injection_pressure[index-1] > 0 and injection_pressure[index+1] > 0:
+                            injection_pressure[index] = (injection_pressure[index-1]+injection_pressure[index+1])/2
+                        elif injection_pressure[index-1] > 0:
+                            injection_pressure[index] = injection_pressure[index-1]
+                        elif injection_pressure[index+1] > 0:
+                            injection_pressure[index] = injection_pressure[index+1]
+                    elif injection_pressure[index] < 0 and index == 0:
+                        injection_pressure[index] = injection_pressure[index+1]
+                    elif injection_pressure[index] < 0 and index == len(injection_pressure)-1:
+                        injection_pressure[index] = injection_pressure[index-1]
+        return injection_pressure
         
     def load_data_sheet(self,path, outcomment='#'):
         #This can open both .csv or tabulated data.
@@ -126,6 +171,7 @@ class data_loading_tools(object):
             data_dict                   = {}
             data_dict['injection time'] = self.read_injection_time(path+'/'+file)
             data_dict['line pressure']  = self.read_line_pressure(path+'/'+file)
+            data_dict['line back pressure']  = self.read_line_back_pressure(path+'/'+file)
             data_dict['retention time'] = data[0]
             data_dict['FID']            = data[1]
             data_dict['TCD']            = data[2]
@@ -588,7 +634,7 @@ def GcFridayLogo():
     print('  \ `.___]  _|\ `.___.´\     _| |_   _/ /    \ \_  _| |  \ \_ |`\____) | _| |___/ |  _| |  \ \_   ')
     print('   `._____.´   `._____.´    |_____| |____|  |____||____| |___||_______.´|_________| |____| |___|  ')
     print(' FRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAYFRIDAY ')  
-    print(' For use at DTU Physics                                                    GC Parser '+version+' (2021) ')
+    print(' For use at DTU Physics                                                    GC Parser '+version+' (2022) ')
  
 def GcLogo():
     print('----------------------------------------------------------------------------------------------')
@@ -599,7 +645,7 @@ def GcLogo():
     print('\ `.___]  _|\ `.___.´\     _| |_   _/ /    \ \_  _| |  \ \_ |`\____) | _| |___/ |  _| |  \ \_ ')
     print(' `._____.´   `._____.´    |_____| |____|  |____||____| |___||_______.´|_________| |____| |___|')
     print('----------------------------------------------------------------------------------------------')  
-    print('For use at DTU Physics                                                  GC Parser '+version+' (2021)')
+    print('For use at DTU Physics                                                  GC Parser '+version+' (2022)')
 
 def GcFridaySpecial():
     if os.name == 'nt':
