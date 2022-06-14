@@ -189,10 +189,11 @@ class data_loading_tools(object):
         #vectors: relative time(s), temperature before bed(celsius), pressure(bar), gas(H2), gas(CO2), gas(CO), gas(Ar), gas(O2), temperature after bed(celsius)
         rel_time = setup_data[0] #units in seconds
         reactor_temperature = setup_data[1] #units in celsius
-        try:
-            reactor_pressure = (setup_data[7]+setup_data[8])*0.5 #units in bar
-        except:
-            reactor_pressure = setup_data[7]
+        #try:
+        #    reactor_pressure = (setup_data[7]+setup_data[8])*0.5 #units in bar
+        #except:
+        #    reactor_pressure = setup_data[7]
+        reactor_pressure = setup_data[7] #front pressure is much closer to the actual reactor-pressure
         massflow_O2  = self.info.O2_MFC_factor*setup_data[2]+self.info.O2_MFC_offset #O2
         massflow_H2  = self.info.H2_MFC_factor*setup_data[3]+self.info.H2_MFC_offset #H2
         massflow_CO2 = self.info.CO2_MFC_factor*setup_data[4]+self.info.CO2_MFC_offset #CO2

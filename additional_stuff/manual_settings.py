@@ -57,7 +57,7 @@ class MANUAL_SETTINGS(object):
                                              'C3H8': 0.2959/3.00, #+-17%, response: 3 [2]
                                              'C4Hx': 0.2959/4.00,
                                              'DME' : 0.2959/1.10938, #+-1%; response: 1.10938 [1]
-                                             'MeOH': 0.2959/0.628319, #+-1%; response: 0.628319 [1]
+                                             'MeOH': 0.2959/0.6692, #+-1%; response: 0.628319 [1], 0.6692 [estimated with CuZn equilibrium. Direct factor is 0.4422], 0.8886 [estimated with methanol vapour pressure, direct factor is 0.3330], 0.52 [2]
                                              'EtOH': 0.2959/1.59} #+-17%, response: 1.59 [2]
 
         
